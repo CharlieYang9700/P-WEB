@@ -3,11 +3,14 @@ package com.mas.controller;
 import com.mas.annotation.Login;
 import com.mas.export.CSVUtils;
 import com.mas.model.Student;
+import com.mas.model.UserInfo;
+import com.mas.service.UserInfoService;
 import com.mas.utils.InsertNullValue;
 import com.sun.deploy.net.HttpRequest;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +24,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("test/")
 public class TestController {
-/*    @Autowired
-    private RedisTemplate redisTemplate;*/
+    @Autowired
+    private RedisTemplate redisTemplate;
     public static Integer num = 1;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @PostMapping("hello")
     @CrossOrigin
@@ -68,6 +74,11 @@ public class TestController {
         String path = "D:\\CVSFile\\";
 
         CSVUtils.exportDataFile(response,exportData,map,path,"test");
+    }
+
+    @GetMapping("user")
+    public List<UserInfo> getAllUser(){
+        return userInfoService.getAllUser();
     }
 
 
