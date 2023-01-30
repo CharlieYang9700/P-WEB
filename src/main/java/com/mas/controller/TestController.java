@@ -31,11 +31,11 @@ public class TestController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @PostMapping("hello")
+    @GetMapping("hello")
     @CrossOrigin
-    @Login
+//    @Login
     public List<Student> test() throws Exception {
-        //redisTemplate.opsForHash().put("redisHash","stock",10);
+        redisTemplate.opsForHash().put("redisHash","stock",10);
         System.out.println("调用"+ num++ +"次");
         Student s1 = new Student("李四", "男");
         Student s2 = new Student("张三", "男");
