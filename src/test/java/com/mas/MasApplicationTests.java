@@ -1,11 +1,18 @@
 package com.mas;
 
 
+import com.alibaba.excel.EasyExcel;
 import com.mas.concurrency.LoggingWidget;
 import com.mas.concurrency.Widget;
+import com.mas.model.UserInfo;
 import com.mas.zip.HuffmanNode;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 @SpringBootTest
 class MasApplicationTests {
@@ -42,6 +49,19 @@ class MasApplicationTests {
         System.out.println(node1.compareTo(node3));
         System.out.println(node1.compareTo(node1));
         System.out.println(node2.compareTo(node1));
+
+    }
+    @Test
+    void easyExcelExportText(){
+        ArrayList<UserInfo> userInfos = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(Long.parseLong(i+""));
+            userInfo.setUsername("名字"+i);
+            userInfo.setPassword("密码"+i);
+            userInfos.add(userInfo);
+        }
+        EasyExcel.write("用户表.xlsx", UserInfo.class).sheet().doWrite(userInfos);
 
     }
 
