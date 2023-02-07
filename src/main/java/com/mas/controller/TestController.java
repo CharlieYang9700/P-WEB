@@ -7,6 +7,8 @@ import com.mas.model.UserInfo;
 import com.mas.service.UserInfoService;
 import com.mas.utils.InsertNullValue;
 import com.sun.deploy.net.HttpRequest;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Api
 @RequestMapping("test/")
 public class TestController {
     @Autowired
@@ -33,8 +36,10 @@ public class TestController {
 
     @GetMapping("hello")
     @CrossOrigin
-//    @Login
+    @Login
+    @ApiOperation("测试")
     public List<Student> test() throws Exception {
+
         redisTemplate.opsForHash().put("redisHash","stock",10);
         System.out.println("调用"+ num++ +"次");
         Student s1 = new Student("李四", "男");
@@ -42,9 +47,9 @@ public class TestController {
         ArrayList<Student> students = new ArrayList<>();
         students.add(s1);
         students.add(s2);
-/*        for (Student student : students) {
-            InsertNullValue.setObjectEmptyValue(student,null);
-        }*/
+        for (Student student : students) {
+            InsertNullValue.setObjectEmptyValue(student,students);
+        }
         return students;
     }
 
@@ -82,4 +87,10 @@ public class TestController {
     }
 
 
+    @GetMapping("/code")
+    public String getNum(String info) {
+        System.out.println(info);
+        System.out.println(userInfoService.getCode(info));
+        return userInfoService.getCode(info);
+    }
 }
