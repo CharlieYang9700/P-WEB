@@ -1,9 +1,12 @@
 package com.mas.utils;
 
+import lombok.Data;
+
 /**
  * 返回结果集
  * @param <T>
  */
+@Data
 public class Result <T>{
     private int code;
     private String errorCode;

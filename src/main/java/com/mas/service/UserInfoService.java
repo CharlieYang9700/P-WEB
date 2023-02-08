@@ -22,7 +22,7 @@ public interface UserInfoService extends IService<UserInfo> {
      */
     UserInfo getUserInfoByUsername(String username);
 
-    Pager<UserInfoVO> page(UserInfoPageParam param);
+    Pager<UserInfoVO> page (UserInfoPageParam param);
 
     String getCode(String province);
 

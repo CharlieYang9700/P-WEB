@@ -50,12 +50,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return null;
     }
 
-    private UserInfoVO transform(UserInfo userInfo){
-        UserInfoVO userInfoVO = new UserInfoVO();
-        userInfoVO.setId(userInfo.getId());
-        userInfoVO.setUsername(userInfo.getUsername());
-        return userInfoVO;
-    }
+
 
     @Override
     public String getCode(String province) {
@@ -111,7 +106,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             throw new BizException("用户不存在");
         }
         //第二部 若存在这取到用户数据进行比对
-        return null;
+        return this.transform(dbUserInfo);
+    }
+    private UserInfoVO transform(UserInfo userInfo){
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setId(userInfo.getId());
+        userInfoVO.setUsername(userInfo.getUsername());
+        return userInfoVO;
     }
 
 }
