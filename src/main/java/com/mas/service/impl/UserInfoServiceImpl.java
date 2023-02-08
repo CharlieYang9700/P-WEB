@@ -14,8 +14,10 @@ import com.mas.service.UserInfoService;
 import com.mas.utils.BizException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
