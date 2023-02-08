@@ -1,4 +1,4 @@
-package com.mas.param;
+package com.mas.model.param;
 
 import com.mas.mybatis.PageParam;
 import lombok.Data;

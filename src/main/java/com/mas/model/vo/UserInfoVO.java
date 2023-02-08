@@ -11,4 +11,6 @@ public class UserInfoVO {
     private Long id;
     @ApiModelProperty("用户名")
     private String username;
+
+    private String token;
 }
