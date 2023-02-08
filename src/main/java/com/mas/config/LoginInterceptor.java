@@ -30,6 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(Objects.isNull(login)){
             return;
         }
+
         String authorization = request.getHeader("authorization");
         if(StringUtils.isEmpty(authorization)){
             throw new Exception("没有携带token");

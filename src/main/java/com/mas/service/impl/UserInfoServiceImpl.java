@@ -6,16 +6,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mas.mapper.UserInfoMapper;
 import com.mas.model.UserInfo;
+import com.mas.model.param.UserLoginParam;
 import com.mas.model.vo.UserInfoVO;
 import com.mas.mybatis.Pager;
 import com.mas.param.UserInfoPageParam;
 import com.mas.service.UserInfoService;
+import com.mas.utils.BizException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService  {
@@ -28,6 +31,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         LambdaQueryWrapper<UserInfo> query = new LambdaQueryWrapper<>();
         query.isNotNull(UserInfo::getId);
         return this.list(query);
+    }
+
+    @Override
+    public UserInfo getUserInfoByUsername(String username) {
+        LambdaQueryWrapper<UserInfo> query = new LambdaQueryWrapper<>();
+        query.eq(UserInfo::getUsername,username);
+        query.last("limit 1");
+        return userInfoMapper.selectOne(query);
     }
 
     @Override
@@ -92,22 +103,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return provinceCode;
     }
 
-    public String getRC014Code(String oldCode){
-        HashMap<String, String> codeList = new HashMap<>();
-        codeList.put("0-","0");
-        codeList.put("1-1","1");
-        codeList.put("1-2","2");
-        codeList.put("1-3","3");
-        codeList.put("1-4","10");
-        codeList.put("2-1","4");
-        codeList.put("2-2","5");
-        codeList.put("2-3","6");
-        codeList.put("2-4","20");
-        codeList.put("3-1","7");
-        codeList.put("3-2","8");
-        codeList.put("3-3","9");
-        codeList.put("3-4","30");
-        return codeList.get(oldCode);
+    @Override
+    public UserInfoVO loginByPassword(UserLoginParam loginParam) throws BizException {
+        //第一步 通过用户名查询数据库看用户是否存在
+        UserInfo dbUserInfo = this.getUserInfoByUsername(loginParam.getUsername());
+        if(Objects.isNull(dbUserInfo)){
+            throw new BizException("用户不存在");
+        }
+        //第二部 若存在这取到用户数据进行比对
+        return null;
     }
 
 }
