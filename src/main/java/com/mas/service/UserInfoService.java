@@ -24,8 +24,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
     Pager<UserInfoVO> page (UserInfoPageParam param);
 
-    String getCode(String province);
-
     /**
      * 用户密码登陆
      * @param loginParam

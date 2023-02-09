@@ -6,9 +6,11 @@ import com.mas.model.Student;
 import com.mas.model.UserInfo;
 import com.mas.service.UserInfoService;
 import com.mas.utils.InsertNullValue;
+import com.mas.utils.LocalUser;
 import com.sun.deploy.net.HttpRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +28,7 @@ import java.util.Map;
 @RestController
 @Api
 @RequestMapping("test/")
+@Slf4j
 public class TestController {
     @Autowired
     private RedisTemplate redisTemplate;
@@ -34,23 +37,13 @@ public class TestController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @GetMapping("hello")
-    @CrossOrigin
+    @PostMapping("hello")
     @Login
     @ApiOperation("测试")
-    public List<Student> test() throws Exception {
-
-        redisTemplate.opsForHash().put("redisHash","stock",10);
-        System.out.println("调用"+ num++ +"次");
-        Student s1 = new Student("李四", "男");
-        Student s2 = new Student("张三", "男");
-        ArrayList<Student> students = new ArrayList<>();
-        students.add(s1);
-        students.add(s2);
-        for (Student student : students) {
-            InsertNullValue.setObjectEmptyValue(student,students);
-        }
-        return students;
+    public String test() {
+        UserInfo userInfo = LocalUser.get();
+        log.info("userInfo={}",userInfo);
+        return "你来过了这个方法";
     }
 
     @PostMapping("download")
@@ -81,16 +74,11 @@ public class TestController {
         CSVUtils.exportDataFile(response,exportData,map,path,"test");
     }
 
+//    @Login
     @GetMapping("user")
     public List<UserInfo> getAllUser(){
         return userInfoService.getAllUser();
     }
 
 
-    @GetMapping("/code")
-    public String getNum(String info) {
-        System.out.println(info);
-        System.out.println(userInfoService.getCode(info));
-        return userInfoService.getCode(info);
-    }
 }

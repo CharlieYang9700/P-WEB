@@ -1,0 +1,33 @@
+server:
+  port: 8080
+spring:
+  redis:
+    host: 124.222.5.164
+    port: 6379
+    timeout: 2000
+    password: e#31Xu2iB%Zj
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://124.222.5.164:3306/charlie_web?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 6a5YJZ6HhrLtyXcr
+    druid:
+      max-active: 10 # 最大活跃数量 默认8
+      min-idle:  2 # 最小空闲数 默认0
+      initial-size: 5 # 初始连接数
+      max-wait: 2000 # 获取连接最大等待时间 默认 -1
+      validation-query: select 1
+      validation-query-timeout: 5000
+      time-between-eviction-runs-millis: 2000 # 间隔多久进行检测需要关闭的空闲连接
+      min-evictable-idle-time-millis: 600000 # 配置连接在池中最小生存的时间
+      max-wait-thread-count: 20 # 最大等待线程数
+  security:
+    user:
+      name: user
+      password: 123456
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+logging:
+  level:
+    com.mas: debug

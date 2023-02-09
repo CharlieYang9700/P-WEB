@@ -27,8 +27,8 @@ public class Result <T>{
         this.code = 0;
     }
 
-    public static Result error(String message, String errorMsg) {
-        return new Result("100", message);
+    public static Result error(String errorCode, String errorMsg) {
+        return new Result("100", errorMsg);
     }
 
     public static <T> Result<T> success(T data) {

@@ -3,10 +3,10 @@ package com.mas.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.mas.model.UserInfo;
-import jdk.internal.org.objectweb.asm.Handle;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class JwtUtils {
     private static String secret = "Xaljenxhshdlj";
@@ -41,8 +41,23 @@ public class JwtUtils {
             jwtBuilder.withExpiresAt(instance.getTime());
         }
         jwtBuilder.withIssuedAt(new Date());
-
+        //签证
         token = jwtBuilder.sign(Algorithm.HMAC256(secret));
         return token;
+    }
+
+    public static Long getUserId(String token) throws BizException {
+        if(StringUtils.isEmpty(token)){
+            throw new BizException("你还未登录，请先登录");
+        }
+        String userIdStr = JWT.decode(token).getClaim("userId").asString();
+        if(StringUtils.isEmpty(userIdStr)){
+            throw new BizException("你已经下线，请重新登录");
+        }
+        Pattern pattern = Pattern.compile("[0-9]*");
+        if(!pattern.matcher(userIdStr).matches()){
+            throw new BizException("非法登录用户");
+        }
+        return Long.parseLong(userIdStr);
     }
 }

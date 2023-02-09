@@ -2,17 +2,22 @@ package com.mas;
 
 
 import com.alibaba.excel.EasyExcel;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mas.concurrency.LoggingWidget;
 import com.mas.concurrency.Widget;
 import com.mas.model.UserInfo;
+import com.mas.utils.BCrypt;
 import com.mas.zip.HuffmanNode;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
+
 
 @SpringBootTest
 class MasApplicationTests {
@@ -62,6 +67,21 @@ class MasApplicationTests {
             userInfos.add(userInfo);
         }
         EasyExcel.write("用户表.xlsx", UserInfo.class).sheet().doWrite(userInfos);
+
+    }
+
+    @Test
+    void getTokenPayload (){
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzU5MTQ0OTMsInVzZXJJZCI6IjgzMDM3ODE2MDM2OTIxMzQ0MCIsImlhdCI6MTY3NTkwNzI5M30.D3MwhUmqeJVWFWb9oLpgayE9WCA0HPOeV2joJOfMZoE";
+        DecodedJWT decode = JWT.decode(token);
+        Claim userId = decode.getClaim("userId");
+        System.out.println(userId);
+    }
+    @Test
+    void BCryptText(){
+        String salt = BCrypt.gensalt(10, new SecureRandom());
+        String hashpw = BCrypt.hashpw("123456", salt);
+        System.out.println(BCrypt.checkpw("123456",hashpw));
 
     }
 
