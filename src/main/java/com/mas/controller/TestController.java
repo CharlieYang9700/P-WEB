@@ -74,9 +74,10 @@ public class TestController {
         CSVUtils.exportDataFile(response,exportData,map,path,"test");
     }
 
-//    @Login
+    @Login
     @GetMapping("user")
     public List<UserInfo> getAllUser(){
+        log.info("testUserInfo={}",LocalUser.get());
         return userInfoService.getAllUser();
     }
 

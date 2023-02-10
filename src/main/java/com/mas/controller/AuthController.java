@@ -12,13 +12,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Api(tags = {"api","登录服务"})
+@CrossOrigin
+@Api(tags = {"登录服务"})
 @RequestMapping("/login/")
 public class AuthController {
     @Autowired
@@ -27,7 +25,6 @@ public class AuthController {
     @PostMapping("register")
     @ApiOperation("用户注册")
     public Result<UserInfoVO> registerByUsernamePassword(@RequestBody @Validated UserRegisterParam registerParam) throws BizException {
-        System.out.println("进入了方法");
         return Result.success(userInfoService.registerByUsernameAndPassword(registerParam));
     }
 

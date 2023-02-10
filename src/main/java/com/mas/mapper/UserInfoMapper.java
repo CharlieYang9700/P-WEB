@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
-    Pager<UserInfoVO> page(Pager<UserInfo> transform, @Param("ew") Wrapper queryWrapper);
+//    Pager<UserInfo> page(Pager<UserInfo> transform, @Param("ew") Wrapper queryWrapper);
 }

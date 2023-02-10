@@ -32,7 +32,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             HandlerMethod method = (HandlerMethod) handler;
             this.verifyLogin(request,method);
         }
-        log.info("已经出来了");
         return true;
     }
 
@@ -58,8 +57,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         log.info("userInfo={}",userInfo);
     }
 
-    @Override
+/*    @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         LocalUser.remove();
-    }
+    }*/
 }

@@ -4,6 +4,8 @@ package com.mas.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mas.mapper.UserInfoMapper;
 import com.mas.model.UserInfo;
@@ -55,12 +57,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public Pager<UserInfoVO> page(UserInfoPageParam param) {
+    public Pager<UserInfoVO> page(UserInfoPageParam pageParam) {
         LambdaQueryWrapper<UserInfo> query = new LambdaQueryWrapper<>();
         query.isNotNull(UserInfo::getId);
-        userInfoMapper.page(Pager.transform(param),query);
-//        return Pager.transform(userInfoMapper.page(Pager.transform(param),query),this::transform);
-        return null;
+
+
+        userInfoMapper.selectPage(Pager.transform(pageParam), query);
+        log.info("pageParam={}",pageParam.getLimit());
+        return Pager.transform(userInfoMapper.selectPage(Pager.transform(pageParam), query),this::transform);
     }
 
 
@@ -85,25 +89,25 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         if(Objects.nonNull(dbUser)){
             throw new BizException("该用户名已经存在");
         }
-        UserInfo userinfo = transform(registerParam);
+        UserInfo userinfo = transform2(registerParam,BCrypt.gensalt());
         userInfoMapper.insert(userinfo);
         return this.transform(userinfo);
     }
 
-    private UserInfoVO transform(UserInfo userInfo){
+    private UserInfoVO transform( UserInfo userInfo){
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setId(userInfo.getId());
         userInfoVO.setUsername(userInfo.getUsername());
         return userInfoVO;
     }
 
-    private UserInfo transform(UserRegisterParam registerParam){
+    private UserInfo transform2(UserRegisterParam registerParam,String salt){
         UserInfo userInfo = new UserInfo();
-        userInfo.setId(IdGeneratorSnowflake.generateId());
+        userInfo.setId(IdWorker.getId());
         userInfo.setUsername(registerParam.getUsername());
         userInfo.setPassword(this.getPassword(registerParam.getPassword()));
         userInfo.setAtTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
-//        userInfo.setSalt(UUID.randomUUID().toString());
+        userInfo.setSalt(salt);
         return userInfo;
     }
 
