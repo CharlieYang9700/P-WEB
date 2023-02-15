@@ -38,4 +38,10 @@ public class UserInfo implements Serializable {
      */
     @TableField("at_time")
     private Long atTime;
+
+    /**
+     *电话号码
+     */
+    @TableField("phone")
+    private String phone;
 }

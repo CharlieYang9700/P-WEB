@@ -2,6 +2,7 @@ package com.mas.service.impl;
 
 
 
+import cn.hutool.core.util.DesensitizedUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -59,9 +60,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public Pager<UserInfoVO> page(UserInfoPageParam pageParam) {
         LambdaQueryWrapper<UserInfo> query = new LambdaQueryWrapper<>();
-        query.isNotNull(UserInfo::getId);
-
-
+        query.ne(UserInfo::getAtTime,0);
         userInfoMapper.selectPage(Pager.transform(pageParam), query);
         log.info("pageParam={}",pageParam.getLimit());
         return Pager.transform(userInfoMapper.selectPage(Pager.transform(pageParam), query),this::transform);
@@ -98,6 +97,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setId(userInfo.getId());
         userInfoVO.setUsername(userInfo.getUsername());
+        userInfoVO.setPhone(DesensitizedUtil.mobilePhone(userInfo.getPhone()));
         return userInfoVO;
     }
 
