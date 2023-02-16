@@ -1,6 +1,7 @@
 package com.mas;
 
 
+import cn.hutool.dfa.WordTree;
 import com.alibaba.excel.EasyExcel;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.Claim;
@@ -11,12 +12,18 @@ import com.mas.model.UserInfo;
 import com.mas.utils.BCrypt;
 import com.mas.zip.HuffmanNode;
 
+import org.apache.commons.collections4.Trie;
+import org.apache.commons.collections4.trie.PatriciaTrie;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -83,6 +90,38 @@ class MasApplicationTests {
         String hashpw = BCrypt.hashpw("123456", salt);
         System.out.println(BCrypt.checkpw("123456",hashpw));
 
+    }
+
+
+    @Test
+    void tuoMin(){
+        Trie<String, String> trie = new PatriciaTrie<>();
+        trie.put("Abigail", "student");
+        trie.put("Abi", "doctor");
+        trie.put("Annabel", "teacher");
+        trie.put("Christina", "student");
+        trie.put("Chris", "doctor");
+        Assertions.assertTrue(trie.containsKey("Abigail"));
+        assertEquals("{Abi=doctor, Abigail=student}", trie.prefixMap("Abi").toString());
+        assertEquals("{Chris=doctor, Christina=student}", trie.prefixMap("Chr").toString());
+    }
+
+    @Test
+    void test3(){
+        WordTree wordTree = new WordTree();
+        wordTree.addWord("大");
+        wordTree.addWord("大憨憨");
+        wordTree.addWord("憨憨");
+        String text = "那人真是个大憨憨！";
+        // 获得第一个匹配的关键字
+        String matchStr = wordTree.match(text);
+        System.out.println(matchStr);
+        // 标准匹配，匹配到最短关键词，并跳过已经匹配的关键词
+        List<String> matchStrList = wordTree.matchAll(text, -1, false, false);
+        System.out.println(matchStrList);
+        //匹配到最长关键词，跳过已经匹配的关键词
+        List<String> matchStrList2 = wordTree.matchAll(text, -1, false, true);
+        System.out.println(matchStrList2);
     }
 
 }

@@ -31,3 +31,6 @@ spring:
 logging:
   level:
     com.mas: debug
+jasypt:
+  encryptor:
+    password: secrect
