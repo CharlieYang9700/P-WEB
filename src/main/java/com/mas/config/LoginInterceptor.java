@@ -59,6 +59,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        //手动清楚TreadLocal的东西，避免内存泄露
         LocalUser.remove();
     }
 }

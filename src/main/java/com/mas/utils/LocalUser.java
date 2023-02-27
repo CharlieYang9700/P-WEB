@@ -14,7 +14,7 @@ public class LocalUser {
         USER_THREAD.set(userInfo);
     }
 
-    public static UserInfo get(){
+    public static UserInfo getUser(){
         return USER_THREAD.get();
     }
     public static void remove(){

@@ -41,7 +41,7 @@ public class TestController {
     @Login
     @ApiOperation("测试")
     public String test() {
-        UserInfo userInfo = LocalUser.get();
+        UserInfo userInfo = LocalUser.getUser();
         log.info("userInfo={}",userInfo);
         return "你来过了这个方法";
     }
@@ -52,8 +52,7 @@ public class TestController {
         Map row1 = new LinkedHashMap<String, String>();
         row1.put("1", "11");
         row1.put("2", "12");
-        row1.put("3", "13");
-        row1.put("4", "14");
+
         exportData.add(row1);
         row1 = new LinkedHashMap<String, String>();
         row1.put("1", "21");
@@ -77,7 +76,7 @@ public class TestController {
     @Login
     @GetMapping("user")
     public List<UserInfo> getAllUser(){
-        log.info("testUserInfo={}",LocalUser.get());
+        log.info("testUserInfo={}",LocalUser.getUser());
         return userInfoService.getAllUser();
     }
 

@@ -2,7 +2,7 @@ package com.mas.service.impl;
 
 
 
-import cn.hutool.core.util.DesensitizedUtil;
+
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -59,12 +59,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public Pager<UserInfoVO> page(UserInfoPageParam pageParam) {
+    public Pager<UserInfoVO> page(UserInfoPageParam param) {
         LambdaQueryWrapper<UserInfo> query = new LambdaQueryWrapper<>();
         query.ne(UserInfo::getAtTime,0);
-        userInfoMapper.selectPage(Pager.transform(pageParam), query);
-        log.info("pageParam={}",pageParam.getLimit());
-        return Pager.transform(userInfoMapper.selectPage(Pager.transform(pageParam), query),this::transform);
+        userInfoMapper.selectPage(Pager.transform(param),query);
+        return Pager.transform(userInfoMapper.selectPage(Pager.transform(param),query),this::transform);
     }
 
 
@@ -89,26 +88,25 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         if(Objects.nonNull(dbUser)){
             throw new BizException("该用户名已经存在");
         }
-        UserInfo userinfo = transform2(registerParam,BCrypt.gensalt());
+        UserInfo userinfo = transform(registerParam);
         userInfoMapper.insert(userinfo);
         return this.transform(userinfo);
     }
 
-    private UserInfoVO transform( UserInfo userInfo){
+    private UserInfoVO transform(UserInfo userInfo){
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setId(userInfo.getId());
         userInfoVO.setUsername(userInfo.getUsername());
-        userInfoVO.setPhone(DesensitizedUtil.mobilePhone(userInfo.getPhone()));
         return userInfoVO;
     }
 
-    private UserInfo transform2(UserRegisterParam registerParam,String salt){
+    private UserInfo transform(UserRegisterParam registerParam){
         UserInfo userInfo = new UserInfo();
         userInfo.setId(IdWorker.getId());
         userInfo.setUsername(registerParam.getUsername());
         userInfo.setPassword(this.getPassword(registerParam.getPassword()));
         userInfo.setAtTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
-        userInfo.setSalt(salt);
+//        userInfo.setSalt(UUID.randomUUID().toString());
         return userInfo;
     }
 
